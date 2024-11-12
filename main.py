@@ -73,7 +73,7 @@ def book_return():
     loan_id = request.form['loan_id']
     loan = Loans.query.get(loan_id)
     loan.return_date = date.today()
-    loan.book.is_borrowed = False
+    loan.books.is_borrowed = False
     db.session.commit()
     return redirect(url_for('books_manage'))
 
