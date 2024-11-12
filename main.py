@@ -58,8 +58,8 @@ def loans_manage():
 
 @app.route('/loans', methods=['POST'])
 def loan_book():
-    books_id = request.form['book_id']
-    readers_id = request.form['reader_id']
+    books_id = request.form['books_id']
+    readers_id = request.form['readers_id']
     borrow_date = date.today()
     loan = Loans(books_id=books_id, readers_id=readers_id, borrow_date=borrow_date)
     book = Books.query.get(books_id)
