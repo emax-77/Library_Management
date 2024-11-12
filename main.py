@@ -22,7 +22,7 @@ def books_manage():
         new_book = Books(title=title, author=author)
         db.session.add(new_book)
         db.session.commit()
-        return redirect(url_for('manage_books'))
+        return redirect(url_for('books_manage'))
     books = Books.query.all()
     return render_template('books.html', books=books)
 
@@ -36,7 +36,7 @@ def readers_manage():
         new_reader = Readers(id_number=id_number, first_name=first_name, last_name=last_name, birth_date=birth_date)
         db.session.add(new_reader)
         db.session.commit()
-        return redirect(url_for('manage_readers'))
+        return redirect(url_for('readers_manage'))
     readers = Readers.query.all()
     return render_template('readers.html', readers=readers)
 
@@ -57,7 +57,7 @@ def book_loan():
     book.is_borrowed = True
     db.session.add(loan)
     db.session.commit()
-    return redirect(url_for('manage_books'))
+    return redirect(url_for('books_manage'))
 
 @app.route('/return_book', methods=['POST'])
 def book_return():
@@ -66,7 +66,7 @@ def book_return():
     loan.return_date = date.today()
     loan.book.is_borrowed = False
     db.session.commit()
-    return redirect(url_for('manage_books'))
+    return redirect(url_for('books_manage'))
 
 if __name__ == '__main__':
     app.run(debug=True)
