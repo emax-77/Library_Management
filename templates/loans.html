@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h1>Loans</h1>
+
+<!-- Current Loans List -->
+<h2>Current Loans</h2>
+<ul id="loan-list">
+    {% for loan in loans %}
+    <li>
+        Book: "{{ loan.book.title }}" by {{ loan.book.author }}<br>
+        Borrowed by: {{ loan.reader.first_name }} {{ loan.reader.last_name }} (ID: {{ loan.reader.id_number }})<br>
+        Borrow Date: {{ loan.borrow_date }}{% if not loan.return_date %} - <strong>Not Returned</strong>{% else %} - Returned on: {{ loan.return_date }}{% endif %}
+        
+        {% if not loan.return_date %}
+        <!-- Return Book Form -->
+        <form method="POST" action="{{ url_for('book_return') }}" style="display: inline;">
+            <input type="hidden" name="loan_id" value="{{ loan.id }}">
+            <button type="submit">Return Book</button>
+        </form>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+<!-- Borrow a Book Form -->
+<h2>Borrow a Book</h2>
+<form method="POST" action="{{ url_for('book_loan') }}">
+    <label for="book_id">Select Book:</label>
+    <select id="book_id" name="book_id" required>
+        {% for book in available_books %}
+        <option value="{{ book.id }}">{{ book.title }} by {{ book.author }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="reader_id">Select Reader:</label>
+    <select id="reader_id" name="reader_id" required>
+        {% for reader in readers %}
+        <option value="{{ reader.id_number }}">{{ reader.first_name }} {{ reader.last_name }} (ID: {{ reader.id_number }})</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Borrow Book</button>
+</form>
+{% endblock %}
