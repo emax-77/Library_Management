@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library Management</title>
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('books_manage') }}">Books</a>
+        <a href="{{ url_for('readers_manage') }}">Readers</a>
+    </nav>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
