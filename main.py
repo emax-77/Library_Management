@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from models import db, Books, Readers, Loans
-from datetime import date
+from datetime import date, datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -10,10 +10,12 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
+# Maing page
 @app.route('/')
 def index():
     return render_template('base.html')
 
+# Books management page
 @app.route('/books', methods=['GET', 'POST'])
 def books_manage():
     if request.method == 'POST':
@@ -26,17 +28,24 @@ def books_manage():
     books = Books.query.all()
     return render_template('books.html', books=books)
 
+# Readers management page
 @app.route('/readers', methods=['GET', 'POST'])
-def readers_manage():
+def readers_manage():	
     if request.method == 'POST':
         id_number = request.form['id_number']
         first_name = request.form['first_name']
         last_name = request.form['last_name']
-        birth_date = request.form['birth_date']
+        birth_date_str = request.form['birth_date'] # Convert the birth_date to Python date object
+        birth_date = datetime.strptime(birth_date_str, '%Y-%m-%d').date()
+
+        # Create a new reader object
         new_reader = Readers(id_number=id_number, first_name=first_name, last_name=last_name, birth_date=birth_date)
+        
+        # Add and commit the new reader to the database
         db.session.add(new_reader)
         db.session.commit()
         return redirect(url_for('readers_manage'))
+
     readers = Readers.query.all()
     return render_template('readers.html', readers=readers)
 
@@ -48,7 +57,7 @@ def loans_manage():
     return render_template('loans.html', loans=loans, available_books=available_books, readers=readers)
 
 @app.route('/loans', methods=['POST'])
-def book_loan():
+def loan_book():
     book_id = request.form['book_id']
     reader_id = request.form['reader_id']
     borrow_date = date.today()
