@@ -23,7 +23,7 @@
 </ul>
 <!-- Borrow a Book Form -->
 <h2>Borrow a Book</h2>
-<form method="POST" action="{{ url_for('book_loan') }}">
+<form method="POST" action="{{ url_for('loan_book') }}">
     <label for="book_id">Select Book:</label>
     <select id="book_id" name="book_id" required>
         {% for book in available_books %}
