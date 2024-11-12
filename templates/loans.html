@@ -5,8 +5,8 @@
 <ul id="loan-list">
     {% for loan in loans %}
     <li>
-        Book: "{{ loan.book.title }}" by {{ loan.book.author }}<br>
-        Borrowed by: {{ loan.reader.first_name }} {{ loan.reader.last_name }} (ID: {{ loan.reader.id_number }})<br>
+        Book: "{{ loan.books.title }}" by {{ loan.books.author }}<br>
+        Borrowed by: {{ loan.readers.first_name }} {{ loan.readers.last_name }} (ID: {{ loan.readers.id_number }})<br>
         Borrow Date: {{ loan.borrow_date }}{% if not loan.return_date %} - <strong>Not Returned</strong>{% else %} - Returned on: {{ loan.return_date }}{% endif %}
         
         {% if not loan.return_date %}
