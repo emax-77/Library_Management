@@ -61,7 +61,7 @@ def loan_book():
     books_id = request.form['book_id']
     readers_id = request.form['reader_id']
     borrow_date = date.today()
-    loan = Loans(book_id=books_id, readers_id=readers_id, borrow_date=borrow_date)
+    loan = Loans(books_id=books_id, readers_id=readers_id, borrow_date=borrow_date)
     book = Books.query.get(books_id)
     book.is_borrowed = True
     db.session.add(loan)
