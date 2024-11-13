@@ -1,16 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
+
 <h1>Readers</h1>
-
-<!-- Readers List -->
-<ul id="reader-list">
-    {% for reader in readers %}
-    <li>
-        {{ reader.first_name }} {{ reader.last_name }} - ID: {{ reader.id_number }}, Born: {{ reader.birth_date }}
-    </li>
-    {% endfor %}
-</ul>
-
 <!-- Add New Reader -->
 <form method="POST" action="{{ url_for('readers_manage') }}">
     <label for="id_number">ID Number:</label>
@@ -27,4 +18,14 @@
     
     <button type="submit">Add Reader</button>
 </form>
+
+<!-- Readers List -->
+<ul>
+    {% for reader in readers %}
+    <li>
+        {{ reader.first_name }} {{ reader.last_name }} - ID: {{ reader.id_number }}, Born: {{ reader.birth_date }}
+    </li>
+    {% endfor %}
+</ul>
+
 {% endblock %}
