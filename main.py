@@ -39,7 +39,7 @@ def readers_manage():
         id_number = request.form['id_number']
         first_name = request.form['first_name']
         last_name = request.form['last_name']
-        birth_date_str = request.form['birth_date'] # Convert the birth_date to Python date object
+        birth_date_str = request.form['birth_date'] # Convert the birth_date to Python date object so it can be stored in the database
         birth_date = datetime.strptime(birth_date_str, '%Y-%m-%d').date()
 
         # Create reader
@@ -65,7 +65,7 @@ def loans_manage():
         loan = Loans(books_id=books_id, readers_id=readers_id, borrow_date=borrow_date)
         book = Books.query.get(books_id)
         book.is_borrowed = True
-        
+
         # Add loan to database
         db.session.add(loan)
         db.session.commit()
@@ -75,19 +75,6 @@ def loans_manage():
     readers = Readers.query.all()
     return render_template('loans.html', loans=loans, available_books=available_books, readers=readers)
 
-""" 
-@app.route('/loans', methods=['POST'])
-def book_loan():
-    books_id = request.form['books_id']
-    readers_id = request.form['readers_id']
-    borrow_date = date.today()
-    loan = Loans(books_id=books_id, readers_id=readers_id, borrow_date=borrow_date)
-    book = Books.query.get(books_id)
-    book.is_borrowed = True
-    db.session.add(loan)
-    db.session.commit()
-    return redirect(url_for('loans_manage'))
- """
 # Return book
 @app.route('/return_book', methods=['POST'])
 def book_return():
