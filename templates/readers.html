@@ -4,14 +4,15 @@
 <h1>Readers</h1>
 <!-- Add New Reader -->
 <form method="POST" action="{{ url_for('readers_manage') }}">
-    <label for="id_number">ID Number:</label>
-    <input type="text" id="id_number" name="id_number" placeholder="ID Number" required>
     
     <label for="first_name">First Name:</label>
     <input type="text" id="first_name" name="first_name" placeholder="First Name" required>
     
     <label for="last_name">Last Name:</label>
     <input type="text" id="last_name" name="last_name" placeholder="Last Name" required>
+
+    <label for="id_number">ID Number:</label>
+    <input type="text" id="id_number" name="id_number" placeholder="ID Number" required>
     
     <label for="birth_date">Birth Date:</label>
     <input type="date" id="birth_date" name="birth_date" required>
@@ -20,10 +21,10 @@
 </form>
 
 <!-- Readers List -->
-<ul>
+<ul class="reader-list">
     {% for reader in readers %}
-    <li>
-        {{ reader.first_name }} {{ reader.last_name }} - ID: {{ reader.id_number }}, Born: {{ reader.birth_date }}
+    <li class="reader-item">
+        <span class="reader-name">{{ reader.first_name }} {{ reader.last_name }}</span>, id nr.: {{ reader.id_number }}, born: {{ reader.birth_date }}
     </li>
     {% endfor %}
 </ul>

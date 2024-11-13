@@ -12,11 +12,11 @@
 <!-- Books List with Borrowed Status -->
 <ul class="book-list">
     {% for book, loan_info in books_with_loans %}
-    <li>
-        {{ book.title }} by {{ book.author }} 
+    <li class="book-item">
+        <span class="book-title">{{ book.title }}</span> ({{ book.author }})
         {% if book.is_borrowed %}
             {% if loan_info %}
-                <span> - Borrowed by: {{ loan_info.readers.first_name }} {{ loan_info.readers.last_name }}</span>
+                <span class="borrowed" > Borrowed by: {{ loan_info.readers.first_name }} {{ loan_info.readers.last_name }}</span>
             {% endif %}
         {% endif %}
     </li>

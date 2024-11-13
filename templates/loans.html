@@ -2,27 +2,6 @@
 {% block content %}
 
 <div class="grid-container">
-    <div class="grid-item1">
-        <!-- Loan Book Form with Loan List -->
-        <h1>Loans</h1>
-        <ul>
-            {% for loan in loans %}
-            <li>
-                Book: "{{ loan.books.title }}" by {{ loan.books.author }}<br>
-                Borrowed by: {{ loan.readers.first_name }} {{ loan.readers.last_name }} (ID: {{ loan.readers.id_number }})<br>
-                Borrow Date: {{ loan.borrow_date }}{% if not loan.return_date %} - <strong>Not Returned</strong>{% else %} - Returned on: {{ loan.return_date }}{% endif %}
-                
-                {% if not loan.return_date %}
-                <!-- Return Book Form -->
-                <form method="POST" action="{{ url_for('book_return') }}" style="display: inline;">
-                    <input type="hidden" name="loan_id" value="{{ loan.id }}">
-                    <button type="submit">Return Book</button>
-                </form>
-                {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
     <!-- Borrow a Book Form -->
     <div class="grid-item2">
         <h1>Borrow a Book</h1>
@@ -43,6 +22,27 @@
 
             <button type="submit">Borrow Book</button>
         </form>
+    </div>
+    <div class="grid-item1">
+        <!-- Loan Book Form with Loan List -->
+        <h1>Loans</h1>
+        <ul>
+            {% for loan in loans %}
+            <li>
+                Book: "{{ loan.books.title }}" by {{ loan.books.author }}<br>
+                Borrowed by: {{ loan.readers.first_name }} {{ loan.readers.last_name }} (ID: {{ loan.readers.id_number }})<br>
+                Borrow Date: {{ loan.borrow_date }}{% if not loan.return_date %} - <strong>Not Returned</strong>{% else %} - Returned on: {{ loan.return_date }}{% endif %}
+                
+                {% if not loan.return_date %}
+                <!-- Return Book Form -->
+                <form method="POST" action="{{ url_for('book_return') }}" style="display: inline;">
+                    <input type="hidden" name="loan_id" value="{{ loan.id }}">
+                    <button type="submit">Return Book</button>
+                </form>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
     </div>
 </div>
 {% endblock %}
