@@ -3,6 +3,7 @@
 
 <div class="grid-container">
     <div class="grid-item1">
+        <!-- Loan Book Form with Loan List -->
         <h1>Loans</h1>
         <ul>
             {% for loan in loans %}
@@ -36,7 +37,7 @@
             <label for="readers_id">Select Reader:</label>
             <select id="readers_id" name="readers_id" required>
                 {% for reader in readers %}
-                <option value="{{ readers.id_number }}">{{ reader.first_name }} {{ reader.last_name }} (ID: {{ reader.id_number }})</option>
+                <option value="{{ reader.id_number }}">{{ reader.first_name }} {{ reader.last_name }} (ID: {{ reader.id_number }})</option>
                 {% endfor %}
             </select>
 

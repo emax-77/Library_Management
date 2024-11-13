@@ -4,13 +4,13 @@ from datetime import date, datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # Disable modification tracking
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable modification tracking
 db.init_app(app)
 
 with app.app_context():
     db.create_all()
 
-# Maing page
+# Main page
 @app.route('/')
 def index():
     return render_template('base.html')
@@ -21,35 +21,43 @@ def books_manage():
     if request.method == 'POST':
         title = request.form['title']
         author = request.form['author']
-
-        # Create book 
+        # create a new book
         new_book = Books(title=title, author=author)
-
-        # Add book to database
+        # add the book to the database
         db.session.add(new_book)
         db.session.commit()
         return redirect(url_for('books_manage'))
+
     books = Books.query.all()
-    return render_template('books.html', books=books)
+
+    # create a list with book and loan info
+    books_with_loans = []
+    for book in books:
+        loan_info = None
+        if book.is_borrowed:
+            loan_info = Loans.query.filter_by(books_id=book.id, return_date=None).first()  # Get current active loan
+        books_with_loans.append((book, loan_info))
+    
+    return render_template('books.html', books_with_loans=books_with_loans)
 
 # Readers management page
 @app.route('/readers', methods=['GET', 'POST'])
-def readers_manage():	
+def readers_manage():
     if request.method == 'POST':
         id_number = request.form['id_number']
         first_name = request.form['first_name']
         last_name = request.form['last_name']
-        birth_date_str = request.form['birth_date'] # Convert the birth_date to Python date object so it can be stored in the database
+        birth_date_str = request.form['birth_date']
         birth_date = datetime.strptime(birth_date_str, '%Y-%m-%d').date()
 
-        # Create reader
+        # create a new reader
         new_reader = Readers(id_number=id_number, first_name=first_name, last_name=last_name, birth_date=birth_date)
-        
-        # Add reader to database
+
+        # add the reader to the database
         db.session.add(new_reader)
         db.session.commit()
         return redirect(url_for('readers_manage'))
-
+    
     readers = Readers.query.all()
     return render_template('readers.html', readers=readers)
 
@@ -61,15 +69,18 @@ def loans_manage():
         readers_id = request.form['readers_id']
         borrow_date = date.today()
 
-        # Create loan
+        # create a new loan
         loan = Loans(books_id=books_id, readers_id=readers_id, borrow_date=borrow_date)
+
+        # update the book's is_borrowed status
         book = Books.query.get(books_id)
         book.is_borrowed = True
 
-        # Add loan to database
+        # add the loan to the database
         db.session.add(loan)
         db.session.commit()
         return redirect(url_for('loans_manage'))
+    
     loans = Loans.query.all()
     available_books = Books.query.filter_by(is_borrowed=False).all()
     readers = Readers.query.all()
@@ -81,11 +92,11 @@ def book_return():
     loan_id = request.form['loan_id']
     loan = Loans.query.get(loan_id)
     loan.return_date = date.today()
+
+    # update the book's is_borrowed status
     loan.books.is_borrowed = False
     db.session.commit()
     return redirect(url_for('loans_manage'))
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
