@@ -3,8 +3,7 @@ from models import db, Books, Readers, Loans
 from datetime import date, datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'  
 db.init_app(app)
 
 with app.app_context():
