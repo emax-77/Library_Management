@@ -1,3 +1,10 @@
+/* Weclome image center */
+.center-image {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* General styles */
 body {
   font-family: Arial, sans-serif;
