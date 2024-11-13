@@ -4,7 +4,7 @@ from datetime import date, datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Disable modification tracking
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  
 db.init_app(app)
 
 with app.app_context():
@@ -28,7 +28,8 @@ def books_manage():
         db.session.commit()
         return redirect(url_for('books_manage'))
 
-    books = Books.query.all()
+    # display data in ascending order
+    books = Books.query.order_by(Books.title.asc()).all()
 
     # create a list with book and loan info
     books_with_loans = []
@@ -58,7 +59,8 @@ def readers_manage():
         db.session.commit()
         return redirect(url_for('readers_manage'))
     
-    readers = Readers.query.all()
+    # display data in ascending order
+    readers = Readers.query.order_by(Readers.first_name.asc()).all()
     return render_template('readers.html', readers=readers)
 
 # Loans management page
