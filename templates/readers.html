@@ -24,7 +24,7 @@
 <ul class="reader-list">
     {% for reader, has_active_loans in readers_with_loans %}
     <li class="reader-item">
-        <span class="reader-name">{{ reader.first_name }} {{ reader.last_name }}</span>, id nr.: {{ reader.id_number }}, born: {{ reader.birth_date }}
+        <span class="reader-name">{{ reader.first_name }} {{ reader.last_name }}</span>ID nr: {{ reader.id_number }}, Born: {{ reader.birth_date }}
         {% if has_active_loans %}
             <span class="borrowed-status">(Has borrowed books)</span>
         {% else %}
