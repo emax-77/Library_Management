@@ -9,6 +9,11 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
+# Add template context processor for current year (for Footer on base.html)
+@app.context_processor
+def inject_now():
+    return {'now': datetime.now()}
+
 # Main page
 @app.route('/')
 def index():
@@ -40,6 +45,20 @@ def books_manage():
     
     return render_template('books.html', books_with_loans=books_with_loans)
 
+# Delete book
+@app.route('/delete_book/<int:book_id>', methods=['POST'])
+def delete_book(book_id):
+    book = Books.query.get_or_404(book_id)
+    
+    # Check if the book is not borrowed
+    if book.is_borrowed:
+        return "Cannot delete book: Book is currently borrowed", 400
+    
+    # If book is not borrowed, proceed with deletion
+    db.session.delete(book)
+    db.session.commit()
+    return redirect(url_for('books_manage'))
+
 # Readers management page
 @app.route('/readers', methods=['GET', 'POST'])
 def readers_manage():
@@ -60,7 +79,29 @@ def readers_manage():
     
     # display data in ascending order
     readers = Readers.query.order_by(Readers.first_name.asc()).all()
-    return render_template('readers.html', readers=readers)
+    
+    # Get active loans for each reader
+    readers_with_loans = []
+    for reader in readers:
+        has_active_loans = Loans.query.filter_by(readers_id=reader.id_number, return_date=None).first() is not None
+        readers_with_loans.append((reader, has_active_loans))
+    
+    return render_template('readers.html', readers_with_loans=readers_with_loans)
+
+# Delete reader
+@app.route('/delete_reader/<string:reader_id>', methods=['POST'])
+def delete_reader(reader_id):
+    reader = Readers.query.filter_by(id_number=reader_id).first()
+    
+    # Check if reader has any active loans
+    active_loans = Loans.query.filter_by(readers_id=reader.id_number, return_date=None).first()
+    if active_loans:
+        return "Cannot delete reader: Reader has borrowed books that haven't been returned", 400
+    
+    # If reader has no active loans, proceed with deletion
+    db.session.delete(reader)
+    db.session.commit()
+    return redirect(url_for('readers_manage'))
 
 # Loans management page
 @app.route('/loans', methods=['GET', 'POST'])
@@ -96,6 +137,20 @@ def book_return():
 
     # update the book's is_borrowed status
     loan.books.is_borrowed = False
+    db.session.commit()
+    return redirect(url_for('loans_manage'))
+
+# Delete loan
+@app.route('/delete_loan/<int:loan_id>', methods=['POST'])
+def delete_loan(loan_id):
+    loan = Loans.query.get_or_404(loan_id)
+    
+    # Check if the book is returned
+    if not loan.return_date:
+        return "Cannot delete loan: Book hasn't been returned yet", 400
+    
+    # If book is returned, proceed with deletion
+    db.session.delete(loan)
     db.session.commit()
     return redirect(url_for('loans_manage'))
 

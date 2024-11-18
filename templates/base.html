@@ -2,17 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Library Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Library Management System - Manage books, readers, and loans">
+    <title>Library Management System</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <nav>
-        <a href="{{ url_for('books_manage') }}">Books</a>
-        <a href="{{ url_for('readers_manage') }}">Readers</a>
-        <a href="{{ url_for('loans_manage') }}">Loans</a>
+        <div class="nav-container">
+            <a href="{{ url_for('index') }}" class="home-link">Home</a>
+            <a href="{{ url_for('books_manage') }}">Books</a>
+            <a href="{{ url_for('readers_manage') }}">Readers</a>
+            <a href="{{ url_for('loans_manage') }}">Loans</a>
+        </div>
     </nav>
     <main>
         {% block content %}{% endblock %}
     </main>
+    <footer>
+        <p>&copy; {{ now.year }} Library Management System. All rights reserved.</p>
+    </footer>
 </body>
 </html>
