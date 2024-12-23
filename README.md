@@ -2,7 +2,7 @@
 
 ## Description
  
-It is a simple web application for library management created using Flask and SQLite. It allows you to add, view and remove books, readers and loans.
+A simple web app for library management created using Flask and SQLite.  It allows all basic operations with books, readers and loans.
 
 ## Requirements
 - Python 
